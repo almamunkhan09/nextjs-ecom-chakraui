@@ -22,14 +22,6 @@ import React, { useState } from 'react';
 import { products } from '../../products';
 
 const generateCard = (item) => {
-  const [initialCount, setInitialCount] = useState(1);
-  const addOne = () => {
-    setInitialCount((preValue) => preValue + 1);
-  };
-  const removeOne = () => {
-    setInitialCount((preValue) => (preValue > 1 ? preValue - 1 : preValue));
-  };
-
   return (
     <Card key={item.id} m={4} maxW="sm" bg={'#ff914d'}>
       <Link
@@ -56,25 +48,6 @@ const generateCard = (item) => {
         </CardBody>
         <Divider />
         <CardFooter>
-          {/* <ButtonGroup size="sm" isAttached variant="outline">
-          <IconButton
-            aria-label="Add to friends"
-            icon={<MinusIcon />}
-            onClick={removeOne}
-          />
-
-          <Button>{initialCount}</Button>
-          <IconButton
-            aria-label="Add to friends"
-            icon={<AddIcon />}
-            onClick={addOne}
-          />
-        </ButtonGroup>
-        <ButtonGroup spacing="2">
-          <Button variant="ghost" colorScheme="blue">
-            Add to cart
-          </Button>
-        </ButtonGroup> */}
           <Button
             rightIcon={<ArrowForwardIcon />}
             colorScheme="White"
@@ -103,5 +76,4 @@ function page() {
   );
 }
 
-export { products };
 export default page;

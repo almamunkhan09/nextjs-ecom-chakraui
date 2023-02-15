@@ -1,8 +1,14 @@
-import { AddIcon, MinusIcon, PhoneIcon } from '@chakra-ui/icons';
+import {
+  AddIcon,
+  ArrowForwardIcon,
+  MinusIcon,
+  PhoneIcon,
+} from '@chakra-ui/icons';
 import {
   Box,
   Button,
   ButtonGroup,
+  Center,
   Circle,
   Divider,
   Heading,
@@ -22,7 +28,9 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 
-function CartList() {
+function CartList({ cartList }) {
+  console.log(cartList, 'From list');
+  if (cartList.length < 1) return <Text> No Item in your CartList </Text>;
   return (
     <div>
       <Box
@@ -35,55 +43,71 @@ function CartList() {
       </Box>
 
       <List spacing={3}>
-        <ListItem border={'2px solid'} borderRadius={'10px'} bg="#ffaa66">
-          <HStack>
-            <Text p={4} fontWeight={'bold'}>
-              T Shirtvxcvxccccccccccccccccccc
-            </Text>
+        {cartList.map((item) => {
+          return (
+            <ListItem
+              key={item.id}
+              border={'2px solid'}
+              borderRadius={'10px'}
+              bg="#ffaa66"
+            >
+              <HStack>
+                <Text p={4} fontWeight={'bold'}>
+                  {item.productTitle}
+                </Text>
 
-            <Spacer />
-            <HStack p={2}>
-              <Text pl={10} fontWeight={'bold'}>
-                3pc
-              </Text>
-              <Text p={4} fontWeight={'bold'}>
-                <span>&#215;</span>
-              </Text>
-              <Text p={4} fontWeight={'bold'}>
-                300
-              </Text>
-              <Text p={4} fontWeight={'bold'}>
-                900
-              </Text>
-              <Button> Delete</Button>
-            </HStack>
-          </HStack>
-        </ListItem>
-        <ListItem border={'2px solid'} borderRadius={'10px'} bg="#ffaa66">
-          <HStack>
-            <Text p={4} fontWeight={'bold'}>
-              T Shirtvxcvxccccccccccccccccccc
-            </Text>
-
-            <Spacer />
-            <HStack p={2}>
-              <Text pl={10} fontWeight={'bold'}>
-                3pc
-              </Text>
-              <Text p={4} fontWeight={'bold'}>
-                <span>&#215;</span>
-              </Text>
-              <Text p={4} fontWeight={'bold'}>
-                300
-              </Text>
-              <Text p={4} fontWeight={'bold'}>
-                900
-              </Text>
-              <Button> Delete</Button>
-            </HStack>
-          </HStack>
-        </ListItem>
+                <Spacer />
+                <HStack p={2}>
+                  <Text pl={10} fontWeight={'bold'}>
+                    {item.count}
+                  </Text>
+                  <Text p={4} fontWeight={'bold'}>
+                    <span>&#215;</span>
+                  </Text>
+                  <Text p={4} fontWeight={'bold'}>
+                    {item.pricePerUnit}
+                  </Text>
+                  <Text p={4} fontWeight={'bold'}>
+                    {item.pricePerUnit * item.count}
+                  </Text>
+                  <Button> Delete</Button>
+                </HStack>
+              </HStack>
+            </ListItem>
+          );
+        })}
       </List>
+      <Center
+        mt={5}
+        ml="auto"
+        p={4}
+        maxW="md"
+        border={'2px solid'}
+        borderRadius={'10px'}
+        bg="#ffaa66"
+      >
+        <Heading variant={'h6'}> Toatl Price: {100}</Heading>
+      </Center>
+      <Center
+        mt={5}
+        ml="auto"
+        p={4}
+        maxW="md"
+        justifyContent={'center'}
+        display="flex"
+        border={'2px solid'}
+        borderRadius={'10px'}
+        bg="#ffaa66"
+      >
+        <Button
+          border={'none'}
+          size="lg"
+          rightIcon={<ArrowForwardIcon />}
+          variant="outline"
+        >
+          <Heading variant={'h6'}>Checkout</Heading>
+        </Button>
+      </Center>
     </div>
   );
 }

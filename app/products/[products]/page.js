@@ -15,18 +15,61 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
+import Cookies from 'js-cookie';
 import NextLink from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { products } from '../page';
+import { products } from '../../../products';
 
 function page({ params }) {
-  const [initialCount, setInitialCount] = useState(1);
-  const addOne = () => {
-    setInitialCount((preValue) => preValue + 1);
+  const [count, setCount] = useState(1);
+  const router = useRouter();
+
+  const isCookieExist = Cookies.get('myCart')
+    ? JSON.parse(Cookies.get('myCart'))
+    : [];
+  const [cartList, setCartList] = useState([...isCookieExist]);
+  // console.log(cartList);
+  const countIncrement = () => {
+    count < products[params.products - 1].stock
+      ? setCount((preValue) => preValue + 1)
+      : alert(`Only ${count} is Available instock`);
   };
-  const removeOne = () => {
-    setInitialCount((preValue) => (preValue > 1 ? preValue - 1 : preValue));
+  const countDecrement = () => {
+    setCount((preValue) => (preValue > 1 ? preValue - 1 : preValue));
   };
+  const addTocart = (singleProduct, cart, setCart) => {
+    const newItem = {
+      id: singleProduct.id,
+      productTitle: singleProduct.title,
+      pricePerUnit: singleProduct.price,
+      count,
+      maxAmount: singleProduct.stock,
+    };
+    const newCart = [...cart, newItem];
+    Cookies.set('myCart', JSON.stringify(newCart));
+    setCart((preValue) => [...preValue, newItem]);
+  };
+
+  const updateCart = (singleProduct, cart, setCart) => {
+    const newCart = [...cart];
+    if (newCart.find((element) => element.id === singleProduct.id)) {
+      newCart.find((element) => element.id === singleProduct.id).count = count;
+    }
+
+    // const matchFunction = (element) => element.id === product.id;
+    // const indexOfItem = cartList.findIndex(matchFunction);
+    // console.log(indexOfItem);
+    setCart(newCart);
+    Cookies.set('myCart', JSON.stringify(newCart));
+  };
+
+  const clickHandler = (singleProduct, cart, setCart) => {
+    cart.find((element) => element.id === singleProduct.id)
+      ? updateCart(singleProduct, cart, setCart)
+      : addTocart(singleProduct, cart, setCart);
+  };
+
   return (
     <Card
       variant="elevated"
@@ -59,17 +102,29 @@ function page({ params }) {
                 <IconButton
                   aria-label="Add to friends"
                   icon={<MinusIcon />}
-                  onClick={removeOne}
+                  onClick={countDecrement}
                 />
 
-                <Button>{initialCount}</Button>
+                <Button>{count}</Button>
                 <IconButton
                   aria-label="Add to friends"
                   icon={<AddIcon />}
-                  onClick={addOne}
+                  onClick={countIncrement}
                 />
               </ButtonGroup>
-              <Button variant="solid" colorScheme="blue">
+              <Button
+                variant="solid"
+                colorScheme="blue"
+                onClick={(e) => {
+                  e.preventDefault();
+                  clickHandler(
+                    products[params.products - 1],
+                    cartList,
+                    setCartList,
+                  );
+                  router.refresh('/');
+                }}
+              >
                 Add to Cart
               </Button>
             </ButtonGroup>

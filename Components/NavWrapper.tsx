@@ -14,8 +14,9 @@ import {
   Text,
   useColorMode,
 } from '@chakra-ui/react';
+import Cookies from 'js-cookie';
 import NextLink from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   MdAddShoppingCart,
   MdDarkMode,
@@ -32,8 +33,30 @@ const navStyles = {
 
 const navMenu = ['Home', 'Products', 'MyCart'];
 
+// type cartItem ={
+//   id: number
+//   productTitle: string
+//   pricePerUnit: number,
+//   count: number,
+//   maxAmount: number,
+// }
+
 function NavWrapper({ children }) {
   const { colorMode, toggleColorMode } = useColorMode();
+  const isCookieExist = Cookies.get('myCart')
+    ? JSON.parse(Cookies.get('myCart'))
+    : [];
+  const [cartList, setCartList] = useState([...isCookieExist]);
+  const [totalItemInCartList, setTotalItemInCartList] = useState(0);
+
+  useEffect(() => {
+    if (cartList.length > 0) {
+      const numberOfItems = cartList.map((item) => item.count);
+      setTotalItemInCartList(
+        numberOfItems.reduce((sum, value) => sum + value, 0),
+      );
+    }
+  }, [colorMode]);
 
   return (
     <Flex
@@ -70,14 +93,12 @@ function NavWrapper({ children }) {
           <Link as={NextLink} href="/mycart">
             <IconButton
               py="1"
-              colorScheme="teal"
               aria-label="Notifications"
               icon={
                 <>
-                  <MdAddShoppingCart size="1.5rem" color="white" />
+                  <MdAddShoppingCart size="1.5rem" />
                   <Box
                     as="span"
-                    color="black"
                     position="absolute"
                     top="0px"
                     right="2px"
@@ -85,7 +106,7 @@ function NavWrapper({ children }) {
                     zIndex={9999}
                     fontWeight="700"
                   >
-                    {4}
+                    {totalItemInCartList ? totalItemInCartList : ''}
                   </Box>
                 </>
               }
@@ -107,9 +128,7 @@ function NavWrapper({ children }) {
             onClick={() => {
               toggleColorMode();
             }}
-          >
-            {colorMode === 'light' ? 'Dark' : 'Light'}
-          </IconButton>
+          />
         </HStack>
       </Flex>
       <Divider color={'yellow'} />
