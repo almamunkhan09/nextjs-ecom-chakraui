@@ -26,9 +26,11 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 function CartList({ cartList }) {
+  const router = useRouter();
   console.log(cartList, 'From list');
   if (cartList.length < 1) return <Text> No Item in your CartList </Text>;
   return (
@@ -104,6 +106,7 @@ function CartList({ cartList }) {
           size="lg"
           rightIcon={<ArrowForwardIcon />}
           variant="outline"
+          onClick={() => router.push('/checkout')}
         >
           <Heading variant={'h6'}>Checkout</Heading>
         </Button>

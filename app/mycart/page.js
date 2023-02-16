@@ -34,7 +34,7 @@ function page() {
       justifyContent="center"
       display="flex"
     >
-      <CartList cartList={cartList} />
+      {cartList.length > 0 ? <CartList cartList={cartList} /> : ''}
     </Container>
   );
 }

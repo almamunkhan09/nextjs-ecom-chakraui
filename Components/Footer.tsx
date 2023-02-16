@@ -17,9 +17,9 @@ const SocialButton = ({
   label,
   href,
 }: {
-  children: ReactNode;
-  label: string;
-  href: string;
+  children: ReactNode,
+  label: string,
+  href: string,
 }) => {
   return (
     <Button

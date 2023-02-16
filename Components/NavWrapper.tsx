@@ -1,19 +1,15 @@
 import {
-  Badge,
   Box,
-  Button,
-  Container,
   Divider,
   Flex,
   Heading,
   HStack,
   IconButton,
   Link,
-  MenuButton,
   Spacer,
-  Text,
   useColorMode,
 } from '@chakra-ui/react';
+// @ts-ignore
 import Cookies from 'js-cookie';
 import NextLink from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -52,11 +48,11 @@ function NavWrapper({ children }) {
   useEffect(() => {
     if (cartList.length > 0) {
       const numberOfItems = cartList.map((item) => item.count);
-      setTotalItemInCartList(
+      return setTotalItemInCartList(
         numberOfItems.reduce((sum, value) => sum + value, 0),
       );
     }
-  }, [colorMode]);
+  });
 
   return (
     <Flex
